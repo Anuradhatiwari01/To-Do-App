@@ -87,7 +87,7 @@ This project helped strengthen understanding of:
 
 ---
 
-## ⚙️ How It Works
+## How It Works
 
 1. Users can create tasks.
 2. Tasks are stored in an array of objects.
