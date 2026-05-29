@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Todo List</title>
+
+    <!-- Link to our external CSS file for all styling -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Google Fonts: Poppins for clean, modern typography -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+
+    <!-- ===================== MAIN APP CONTAINER ===================== -->
+    <!-- This is the "card" that holds everything. Centered on screen. -->
+    <div class="app-container">
+
+      <!-- ===== APP HEADER ===== -->
+      <header class="app-header">
+        <!-- <div class="header-icon">✅</div> -->
+        <h1 class="app-title">My Todo App</h1>
+        <p class="app-subtitle">Stay focused. Get things done.</p>
+      </header>
+
+      <!-- ===== STATS BAR ===== -->
+      <!-- Shows the total and completed task counts -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-number" id="total-count">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" id="completed-count">0</span>
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" id="active-count">0</span>
+          <span class="stat-label">Active</span>
+        </div>
+      </div>
+
+      <!-- ===== INPUT SECTION ===== -->
+      <!-- Where the user types a new task and clicks Add -->
+      <div class="input-section">
+        <input
+          type="text"
+          id="task-input"
+          class="task-input"
+          placeholder="What do you need to do?"
+          maxlength="100"
+        />
+        <button id="add-btn" class="add-btn">
+          <span class="add-btn-icon">+</span>
+          Add
+        </button>
+      </div>
+
+      <!-- ===== FILTER SECTION ===== -->
+      <!-- Three buttons: All, Active, Completed -->
+      <div class="filter-section">
+        <!-- The "active-filter" class highlights the currently selected button -->
+        <!-- JavaScript will add/remove this class when a button is clicked -->
+        <button class="filter-btn active-filter" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+      </div>
+
+      <!-- ===== TASK LIST ===== -->
+      <!-- Tasks will be injected here by JavaScript using innerHTML -->
+      <ul class="task-list" id="task-list">
+        <!-- Tasks are rendered here by script.js -->
+      </ul>
+
+      <!-- ===== EMPTY STATE MESSAGE ===== -->
+      <!-- Shown when there are no tasks to display -->
+      <!-- JavaScript will show/hide this using CSS class toggling -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">📋</div>
+        <p class="empty-title">No tasks here!</p>
+        <p class="empty-subtitle">Add a task above to get started.</p>
+      </div>
+
+      <!-- ===== APP FOOTER ===== -->
+      <footer class="app-footer">
+      <p>Designed and developed using HTML, CSS, and JavaScript.</p>
+      </footer>
+
+    </div><!-- end .app-container -->
+
+    <!-- Link to our external JavaScript file -->
+    <!-- Placed at the BOTTOM so HTML loads before JS tries to find elements -->
+    <script src="script.js"></script>
+
+  </body>
+</html>

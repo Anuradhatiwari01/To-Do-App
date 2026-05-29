@@ -1,0 +1,520 @@
+/* ================================================================
+   style.css — All styling for the Todo List App
+   
+   CONCEPTS USED:
+   - CSS Variables (custom properties) for easy theming
+   - Flexbox for layouts
+   - CSS transitions for smooth hover effects
+   - Pseudo-elements (:hover, :focus, ::before)
+   - Media queries for responsiveness
+   ================================================================ */
+
+
+/* ================================================================
+   1. CSS VARIABLES (Custom Properties)
+   
+   Defined on :root so every element in the page can use them.
+   Think of these as "named colors/values" — change once, updates everywhere.
+   ================================================================ */
+:root {
+  /* Color Palette — Blue/Purple/White theme */
+  --color-bg:          #f0f4ff;        /* Light blue-ish page background    */
+  --color-card:        #ffffff;        /* White card background              */
+  --color-primary:     #6366f1;        /* Indigo/Purple — main accent        */
+  --color-primary-dark:#4f46e5;        /* Darker shade for hover states      */
+  --color-primary-soft:#eef2ff;        /* Very light indigo — subtle bg      */
+  --color-success:     #10b981;        /* Green — for completed tasks        */
+  --color-danger:      #f43f5e;        /* Red/pink — for delete button       */
+  --color-danger-soft: #fff1f2;        /* Light red — delete button hover    */
+  --color-text:        #1e1b4b;        /* Dark indigo — primary text         */
+  --color-text-muted:  #6b7280;        /* Grey — secondary/muted text        */
+  --color-border:      #e0e7ff;        /* Light border color                 */
+
+  /* Typography */
+  --font-main: 'Poppins', sans-serif;
+
+  /* Spacing */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-full: 999px;
+
+  /* Shadows */
+  --shadow-card: 0 10px 40px rgba(99, 102, 241, 0.12);
+  --shadow-btn:  0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+
+/* ================================================================
+   2. CSS RESET & BASE STYLES
+   
+   Browsers have default styles that look inconsistent.
+   We "reset" them so we start from a clean slate.
+   box-sizing: border-box makes width/height calculations intuitive.
+   ================================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;             /* At least full viewport height     */
+  display: flex;                 /* Flexbox to center the card         */
+  justify-content: center;       /* Horizontally centered              */
+  align-items: flex-start;       /* Align to top (not vertically mid) */
+  padding: 40px 16px 80px;       /* Top padding + side padding on mobile */
+  
+  /* Subtle dot-grid background for depth */
+  background-image: radial-gradient(circle, #c7d2fe 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+
+/* ================================================================
+   3. APP CONTAINER (The Card)
+   
+   This is the main white card that holds the entire app.
+   max-width keeps it from getting too wide on large screens.
+   ================================================================ */
+.app-container {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  max-width: 560px;
+  padding: 36px 32px 28px;
+  border: 1px solid var(--color-border);
+}
+
+
+/* ================================================================
+   4. APP HEADER
+   ================================================================ */
+.app-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.header-icon {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.app-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.5px;
+}
+
+.app-subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+
+/* ================================================================
+   5. STATS BAR
+   
+   Shows Total / Completed / Active counts.
+   Uses Flexbox to align the three stat items side by side.
+   ================================================================ */
+.stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary-soft);
+  border-radius: var(--radius-md);
+  padding: 14px 24px;
+  margin-bottom: 24px;
+  gap: 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;     /* Stack number above label */
+  align-items: center;
+  flex: 1;
+}
+
+.stat-number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 36px;
+  background-color: var(--color-border);
+}
+
+
+/* ================================================================
+   6. INPUT SECTION
+   
+   The text field and Add button sit side by side using Flexbox.
+   ================================================================ */
+.input-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.task-input {
+  flex: 1;                      /* Takes up all remaining space */
+  padding: 13px 18px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background-color: #fff;
+  outline: none;                 /* Remove default browser outline */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* When the input is focused (clicked into), highlight it */
+.task-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.task-input::placeholder {
+  color: #adb5bd;
+}
+
+/* The "Add" button */
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 13px 22px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;                  /* Remove default button border */
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;               /* Show hand cursor on hover */
+  box-shadow: var(--shadow-btn);
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.add-btn-icon {
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* Hover: darken + tiny lift effect */
+.add-btn:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
+}
+
+/* Active (click): push down */
+.add-btn:active {
+  transform: translateY(0px);
+}
+
+
+/* ================================================================
+   7. FILTER SECTION
+   
+   Three side-by-side filter buttons: All / Active / Completed
+   ================================================================ */
+.filter-section {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background-color: var(--color-primary-soft);
+  padding: 6px;
+  border-radius: var(--radius-md);
+}
+
+.filter-btn {
+  flex: 1;                        /* Each button takes equal width */
+  padding: 8px 12px;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-btn:hover {
+  color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* The active/selected filter button */
+/* JavaScript adds this class to whichever button is currently selected */
+.filter-btn.active-filter {
+  background-color: #ffffff;
+  color: var(--color-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+}
+
+
+/* ================================================================
+   8. TASK LIST
+   
+   The <ul> that holds all task items.
+   list-style: none removes the default bullet points.
+   ================================================================ */
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;             /* Scroll if too many tasks */
+  overflow-y: auto;
+  padding-right: 4px;            /* Prevent scrollbar overlapping content */
+}
+
+/* Custom scrollbar styling (works in Chrome/Edge) */
+.task-list::-webkit-scrollbar {
+  width: 5px;
+}
+.task-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.task-list::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+
+/* ================================================================
+   9. TASK ITEM
+   
+   Each individual task row.
+   JavaScript creates these dynamically using a template in script.js.
+   ================================================================ */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  animation: slideIn 0.25s ease;  /* Animates in when added */
+}
+
+/* Slide-in animation when a new task appears */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Completed task: show muted styling */
+/* JavaScript adds "completed" class to the <li> when checked */
+.task-item.completed {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.task-item.completed:hover {
+  border-color: var(--color-success);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+}
+
+
+/* ===== CUSTOM CHECKBOX ===== */
+/* We hide the real checkbox and style a custom one */
+.task-checkbox {
+  appearance: none;              /* Hides default browser checkbox */
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+/* Checked state: fill with primary color + show a checkmark */
+.task-checkbox:checked {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+/* The checkmark "✓" drawn with CSS pseudo-element */
+.task-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid white;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+
+/* ===== TASK TEXT ===== */
+.task-text {
+  flex: 1;                        /* Takes remaining space */
+  font-size: 0.95rem;
+  color: var(--color-text);
+  word-break: break-word;         /* Prevent long words from overflowing */
+  transition: color 0.2s ease;
+}
+
+/* Strikethrough when task is completed */
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+
+/* ===== DELETE BUTTON ===== */
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #d1d5db;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  opacity: 0;                      /* Hidden by default */
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Show delete button when hovering over the task item */
+.task-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: var(--color-danger);
+  background-color: var(--color-danger-soft);
+}
+
+
+/* ================================================================
+   10. EMPTY STATE
+   
+   The friendly message shown when there are no tasks.
+   JavaScript shows/hides this by toggling the "hidden" class.
+   ================================================================ */
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+}
+
+.empty-icon {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.empty-subtitle {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* The "hidden" utility class — toggled by JavaScript */
+.hidden {
+  display: none;
+}
+
+
+/* ================================================================
+   11. APP FOOTER
+   ================================================================ */
+.app-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.78rem;
+  color: #c4c9d4;
+}
+
+
+/* ================================================================
+   12. RESPONSIVE DESIGN (Mobile)
+   
+   @media queries apply styles only when the screen is small.
+   Below 480px (phones), we adjust sizing and spacing.
+   ================================================================ */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 24px 18px 20px;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+  }
+
+  /* Stack the input + button vertically on very small screens */
+  .input-section {
+    flex-direction: column;
+  }
+
+  .add-btn {
+    justify-content: center;
+    padding: 13px;
+  }
+
+  .stats-bar {
+    padding: 12px 10px;
+  }
+
+  .stat-number {
+    font-size: 1.3rem;
+  }
+}
